@@ -15,11 +15,6 @@ services:
                 build:
                         context: ./activemq
                         dockerfile: ./Dockerfile
-        kafka:
-                image: "kafka:latest"
-                build:
-                        context: ./kafka
-                        dockerfile: ./Dockerfile
         hadoop:
                 image: "hadoop:latest"
                 build:

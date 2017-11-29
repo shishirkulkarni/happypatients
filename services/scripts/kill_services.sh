@@ -1,2 +1,6 @@
-docker stop redis-slave redis-master
-docker rm redis-slave redis-master cassandra-slave cassandra-seed
+#!/bin/bash
+docker stop redis-slave redis-master #redis
+docker stop broker1 broker2 broker3 #activeMq
+docker stop hadoop-namenode #hadoop-datanode
+docker stop cassandra-slave cassandra-seed #cassandra
+
