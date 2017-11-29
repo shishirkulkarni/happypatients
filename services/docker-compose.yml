@@ -1,0 +1,27 @@
+version: '3'
+services:
+        redis:
+                image: "redis:latest"
+                build: 
+                        context: ./redis
+                        dockerfile: ./Dockerfile
+        cassandra:
+                image: "cassandra:latest"
+                build:
+                        context: ./cassandra
+                        dockerfile: ./Dockerfile
+        activemq:
+                image: "activemq:latest"
+                build:
+                        context: ./activemq
+                        dockerfile: ./Dockerfile
+        hadoop:
+                image: "hadoop:latest"
+                build:
+                        context: ./hadoop
+                        dockerfile: ./Dockerfile
+        mongo:
+                image: "mongo:latest"
+                build:
+                        context: ./mongo
+                        dockerfile: ./Dockerfile
