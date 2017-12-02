@@ -7,6 +7,7 @@ import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import edu.sjsu.cs249.happypatients.connectors.CassandraConnector;
 import edu.sjsu.cs249.happypatients.connectors.RedisConnector;
+import edu.sjsu.cs249.happypatients.models.HTTPResponse;
 import edu.sjsu.cs249.happypatients.models.Patient;
 import edu.sjsu.cs249.happypatients.services.PatientService;
 
@@ -24,7 +26,6 @@ import edu.sjsu.cs249.happypatients.services.PatientService;
 public class PatientResource {
 
     private PatientService service = new PatientService();
-    private CassandraConnector connector = new CassandraConnector("localhost", 9042);
     private RedisConnector redisConnector = new RedisConnector("localhost", 6379);
 		
 	@GET
@@ -73,6 +74,14 @@ public class PatientResource {
 		}
 		
 		return p;
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public HTTPResponse postPatient(Patient p) {
+		service.createPatient(p);
+		return new HTTPResponse("User Inserted Successfully!!!");
 	}
 
 
