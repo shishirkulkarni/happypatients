@@ -3,10 +3,12 @@ echo "Booting up cassandra cluster..."
 
 CASSANDRA_PORT=9042
 CLUSTER_NAME='test_cluster'
-CASSANDRA_SEED_PATH=$(cd .. && echo $PWD/cassandra/cassandra-seed)
-CASSANDRA_SLAVE_PATH=$(cd .. && echo $PWD/cassandra/cassandra-slave)
+CASSANDRA_SEED_PATH=$(echo $PWD/cassandra/cassandra-seed)
+CASSANDRA_SLAVE_PATH=$(echo $PWD/cassandra/cassandra-slave)
 
 echo "booting up seed node..."
+
+echo $CASSANDRA_SEED_PATH
 
 docker run -itd \
 	--name cassandra-seed \
