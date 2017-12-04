@@ -1,10 +1,15 @@
 package edu.sjsu.cs249.happypatients.connectors;
 
+import java.util.Date;
+import java.util.UUID;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
+import com.datastax.driver.core.LocalDate;
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-
 import edu.sjsu.cs249.happypatients.models.Patient;
 
 public class CassandraConnector {
@@ -34,26 +39,75 @@ public class CassandraConnector {
 		return session;
 	}
 	
-	public String executeQuery() {
-		if(session == null)
-			createSession();
+	public Patient findOne(UUID id) {
 		
-		return session.execute("select release_version from system.local").one().getString("release_version");
+		PreparedStatement statement = getSession().prepare("SELECT * FROM patients WHERE id = ?");
+		ResultSet results = getSession().execute(statement.bind()
+				.setUUID("id", id));
+		Patient p = new Patient();
+		Row r = results.one();
+		
+		if(r == null)
+			return null;
+		
+		p.setUuid(r.getUUID("id"));
+		p.setName(r.getString("name"));
+		p.setEmail(r.getString("email"));
+		p.setDob(new Date(r.getDate("dob").getMillisSinceEpoch()));
+		p.setPhone(r.getLong("phone"));
+		p.setAddress(r.getString("address"));
+		
+		return p;
 	}
 	
-	public void insert(Patient p) {
-		if(session == null)
-			createSession();
-
-		PreparedStatement statement =  session.prepare(
-				"INSERT INTO patient (id, name, dob, address, phone, email)"
-				+ " VALUES(now(), ?, ?, ?, ?, ?)");
+	public Patient update(Patient p) {
 		
-		session.execute(statement.bind()
+		PreparedStatement statement = getSession().prepare(
+				"UPDATE patients SET "
+				+ "name = ?, "
+				+ "dob = ?, "
+				+ "address = ?, "
+				+ "phone = ?, "
+				+ "email = ? "
+				+ "WHERE id = ?");
+		
+		getSession().execute(statement.bind()
 				.setString("name", p.getName())
 				.setString("email", p.getEmail())
-				.setString("dob", p.getDob())
+				.setDate("dob", LocalDate.fromMillisSinceEpoch(p.getDob().getTime()))
 				.setString("address", p.getAddress())
-				.setInt("phone", p.getPhone()));
+				.setLong("phone", p.getPhone())
+				.setUUID("id", p.getUuid()));
+		
+		return p;
+		
+	}
+	
+	public Patient insert(Patient p) {
+		
+		PreparedStatement statement =  getSession().prepare(
+				"INSERT INTO patients (id, name, dob, address, phone, email)"
+				+ " VALUES(?, ?, ?, ?, ?, ?)");
+		
+		getSession().execute(statement.bind()
+				.setString("name", p.getName())
+				.setString("email", p.getEmail())
+				.setDate("dob", LocalDate.fromMillisSinceEpoch(p.getDob().getTime()))
+				.setString("address", p.getAddress())
+				.setLong("phone", p.getPhone())
+				.setUUID("id", p.getUuid()));
+		
+		return p;
+		
+	}
+	
+	public void delete(Patient p) {
+		PreparedStatement statement = getSession().prepare(
+				"DELETE FROM patients"
+				+ " WHERE id = ?");
+		
+		getSession().execute(
+				statement.bind()
+				.setUUID("id", p.getUuid()));
 	}
 }

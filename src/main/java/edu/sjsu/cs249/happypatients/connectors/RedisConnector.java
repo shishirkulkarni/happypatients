@@ -16,17 +16,21 @@ public class RedisConnector {
 		jedis = new Jedis(this.hostname, this.port);
 	}
 	
-	public String get(String key) {
-		if(jedis == null) {
+	private Jedis getConnection() {
+		if(jedis == null)
 			createConnection();
-		}
-		return jedis.get(key);
+		return jedis;
+	}
+	
+	public String get(String key) {
+		return getConnection().get(key);
 	}
 	
 	public void set(String key, String value) {
-		if(jedis == null) {
-			createConnection();
-		}
-		jedis.set(key, value);
+		getConnection().set(key, value);
+	}
+	
+	public void del(String key) {
+		getConnection().del(key);
 	}
 }

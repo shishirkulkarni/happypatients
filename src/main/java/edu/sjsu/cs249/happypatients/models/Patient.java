@@ -1,30 +1,36 @@
 package edu.sjsu.cs249.happypatients.models;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.sjsu.cs249.happypatients.adapters.*;
 
 
 @XmlRootElement
 public class Patient {
-	private int id, phone;
+	@XmlJavaTypeAdapter(UUIDAdapter.class)
+	private UUID uuid;
+	private long phone;
 	private String name, email, address;
-	private Date dob;
-	private static SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public int getPhone() {
+	@XmlJavaTypeAdapter(DateAdapter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date dob;
+	
+	public long getPhone() {
 		return phone;
 	}
 
-	public void setPhone(int phone) {
+	public void setPhone(long phone) {
 		this.phone = phone;
 	}
 	
@@ -32,10 +38,6 @@ public class Patient {
 	
 	public String getName() {
 		return name;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public String getAddress() {
@@ -46,8 +48,12 @@ public class Patient {
 		this.address = address;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public UUID getUuid() {
+		return uuid;
 	}
 
 	public void setName(String name) {
@@ -72,21 +78,11 @@ public class Patient {
 		this.email = email;
 	}
 
-	public String getDob() {
-		return fmt.format(dob);
+	public Date getDob() {
+		return dob;
 	}
 
-	public void setDob(String dob) {
-		try {
-			this.dob = fmt.parse(dob);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			try {
-				this.dob = fmt.parse("1970-01-01");
-			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 }
