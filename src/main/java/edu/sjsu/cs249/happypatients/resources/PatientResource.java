@@ -1,7 +1,9 @@
 package edu.sjsu.cs249.happypatients.resources;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
@@ -51,7 +53,8 @@ public class PatientResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Patient postPatient(Patient p) {
+	public Patient postPatient(Patient p) {		
+//		return null;
 		try {
 			service.postPatient(p);
 		} catch (IOException e) {
@@ -70,7 +73,7 @@ public class PatientResource {
 		try {
 			p.setUuid(id);
 			service.putPatient(p);
-		} catch (JsonProcessingException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new InternalServerErrorException();
 		}

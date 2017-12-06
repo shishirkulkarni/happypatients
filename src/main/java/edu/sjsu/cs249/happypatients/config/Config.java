@@ -4,6 +4,17 @@ import java.util.Map;
 
 public class Config {
 	Map<String, String> cassandra;
+	Map<String, String> redis;
+	Map<String, String> policyserver;
+	
+	public Map<String, String> getPolicyserver() {
+		return policyserver;
+	}
+
+	public void setPolicyserver(Map<String, String> policyserver) {
+		this.policyserver = policyserver;
+	}
+
 	public Map<String, String> getCassandra() {
 		return cassandra;
 	}
@@ -19,8 +30,6 @@ public class Config {
 	public void setRedis(Map<String, String> redis) {
 		this.redis = redis;
 	}
-
-	Map<String, String> redis;
 	
 	public String getRedisHost() {
 		return redis.get("hostname");
@@ -41,5 +50,21 @@ public class Config {
 	
 	public int getRedisPort() {
 		return Integer.parseInt(redis.get("port"));
+	}
+	
+	public String getPolicyServerHost() {
+		return policyserver.get("hostname");
+	}
+	
+	public int getPolicyServerPort() {
+		return Integer.parseInt(policyserver.get("port"));
+	}
+	
+	public String getPolicyServerProtocol() {
+		return policyserver.get("protocol");
+	}
+	
+	public String getPolicyServerPath() {
+		return policyserver.get("path");
 	}
 }

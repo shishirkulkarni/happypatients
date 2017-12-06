@@ -20,12 +20,40 @@ public class Patient {
 	@XmlJavaTypeAdapter(UUIDAdapter.class)
 	private UUID uuid;
 	private long phone;
-	private String name, email, address;
+	private String name, email, address, treatment, diagnosis;
 	
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date dob;
 	
+	@XmlJavaTypeAdapter(DateAdapter.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+	private Date diagnosisDate;
+
+	public String getTreatment() {
+		return treatment.toUpperCase();
+	}
+
+	public void setTreatment(String treatment) {
+		this.treatment = treatment.toUpperCase();
+	}
+
+	public String getDiagnosis() {
+		return diagnosis;
+	}
+
+	public void setDiagnosis(String diagnosis) {
+		this.diagnosis = diagnosis;
+	}
+
+	public Date getDiagnosisDate() {
+		return diagnosisDate;
+	}
+
+	public void setDiagnosisDate(Date diagnosisDate) {
+		this.diagnosisDate = diagnosisDate;
+	}
+		
 	public long getPhone() {
 		return phone;
 	}

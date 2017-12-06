@@ -56,6 +56,9 @@ public class CassandraConnector {
 		p.setDob(new Date(r.getDate("dob").getMillisSinceEpoch()));
 		p.setPhone(r.getLong("phone"));
 		p.setAddress(r.getString("address"));
+		p.setDiagnosisDate(new Date(r.getDate("diagnosis_date").getMillisSinceEpoch()));
+		p.setDiagnosis(r.getString("diagnosis"));
+		p.setTreatment(r.getString("treatment"));
 		
 		return p;
 	}
@@ -69,6 +72,9 @@ public class CassandraConnector {
 				+ "address = ?, "
 				+ "phone = ?, "
 				+ "email = ? "
+				+ "diagnosis = ? "
+				+ "diagnosis_date = ? "
+				+ "treatment = ? "
 				+ "WHERE id = ?");
 		
 		getSession().execute(statement.bind()
@@ -77,7 +83,10 @@ public class CassandraConnector {
 				.setDate("dob", LocalDate.fromMillisSinceEpoch(p.getDob().getTime()))
 				.setString("address", p.getAddress())
 				.setLong("phone", p.getPhone())
-				.setUUID("id", p.getUuid()));
+				.setUUID("id", p.getUuid())
+				.setDate("diagnosis_date", LocalDate.fromMillisSinceEpoch(p.getDiagnosisDate().getTime()))
+				.setString("diagnosis", p.getDiagnosis())
+				.setString("treatment", p.getTreatment()));
 		
 		return p;
 		
@@ -86,8 +95,8 @@ public class CassandraConnector {
 	public Patient insert(Patient p) {
 		
 		PreparedStatement statement =  getSession().prepare(
-				"INSERT INTO patients (id, name, dob, address, phone, email)"
-				+ " VALUES(?, ?, ?, ?, ?, ?)");
+				"INSERT INTO patients (id, name, dob, address, phone, email, diagnosis_date, diagnosis, treatment)"
+				+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		
 		getSession().execute(statement.bind()
 				.setString("name", p.getName())
@@ -95,7 +104,10 @@ public class CassandraConnector {
 				.setDate("dob", LocalDate.fromMillisSinceEpoch(p.getDob().getTime()))
 				.setString("address", p.getAddress())
 				.setLong("phone", p.getPhone())
-				.setUUID("id", p.getUuid()));
+				.setUUID("id", p.getUuid())
+				.setDate("diagnosis_date", LocalDate.fromMillisSinceEpoch(p.getDiagnosisDate().getTime()))
+				.setString("diagnosis", p.getDiagnosis())
+				.setString("treatment", p.getTreatment()));
 		
 		return p;
 		
