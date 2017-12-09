@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.jms.JMSException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -20,6 +21,8 @@ import javax.ws.rs.core.MediaType;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+
+import edu.sjsu.cs249.happypatients.connectors.ActiveMQConnector;
 import edu.sjsu.cs249.happypatients.models.Patient;
 import edu.sjsu.cs249.happypatients.services.PatientService;
 
@@ -53,8 +56,7 @@ public class PatientResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Patient postPatient(Patient p) {		
-//		return null;
+	public Patient postPatient(Patient p) {	
 		try {
 			service.postPatient(p);
 		} catch (IOException e) {
@@ -72,7 +74,12 @@ public class PatientResource {
 	public Patient putPatient(@PathParam("id") UUID id, Patient p) {
 		try {
 			p.setUuid(id);
-			service.putPatient(p);
+			try {
+				service.putPatient(p);
+			} catch (JMSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			throw new InternalServerErrorException();
@@ -86,8 +93,20 @@ public class PatientResource {
 	public String deletePatient(@PathParam("id") UUID id) {
 		Patient p = new Patient();
 		p.setUuid(id);
-		service.deletePatient(p);
+		try {
+			service.deletePatient(p);
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "Patient deleted successfully";
 	}
-
+	
+	@GET
+	@Path("/test")
+	@Produces(MediaType.TEXT_PLAIN)
+	public String test() {
+		service.sendMessage("Hello World");
+		return "Ok";
+	}
 }

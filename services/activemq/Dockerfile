@@ -13,5 +13,5 @@ COPY ./zoo.cfg /opt/zookeeper-3.4.10/conf/zoo.cfg
 COPY ./activemq.xml /opt/apache-activemq-5.15.2/conf/activemq.xml
 COPY ./server_start.sh /usr/bin
 RUN chmod +x /usr/bin/server_start.sh
-EXPOSE 2181 2888 3888
+EXPOSE 2181 2888 3888 61616 44797
 CMD ["server_start.sh"]

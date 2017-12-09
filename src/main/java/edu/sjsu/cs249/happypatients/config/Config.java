@@ -6,6 +6,7 @@ public class Config {
 	Map<String, String> cassandra;
 	Map<String, String> redis;
 	Map<String, String> policyserver;
+	Map<String, String> activemq;
 	
 	public Map<String, String> getPolicyserver() {
 		return policyserver;
@@ -66,5 +67,29 @@ public class Config {
 	
 	public String getPolicyServerPath() {
 		return policyserver.get("path");
+	}
+	
+	public int getActiveMQPort() {
+		return Integer.parseInt(activemq.get("port"));
+	}
+	
+	public String getActiveMQHost() {
+		return activemq.get("hostname");
+	}
+	
+	public String getActiveMQProtocol() {
+		return activemq.get("protocol");
+	}
+	
+	public String getActiveMQTopic() {
+		return activemq.get("topic");
+	}
+
+	public Map<String, String> getActivemq() {
+		return activemq;
+	}
+
+	public void setActivemq(Map<String, String> activemq) {
+		this.activemq = activemq;
 	}
 }

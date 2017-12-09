@@ -11,3 +11,9 @@ policyserver:
   port: 8080
   path: /policyserver/webapi/myresource
   protocol: http
+activemq:
+  hostname: 172.20.0.4
+  port: 61616
+  protocol: tcp
+  topic: happypatients
+  

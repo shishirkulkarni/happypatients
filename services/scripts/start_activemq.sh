@@ -15,5 +15,4 @@ do
 		--net-alias=broker$i \
 		-e MYID=$i \
 		activemq
-
 done

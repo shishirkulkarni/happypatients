@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -113,4 +114,63 @@ public class Patient {
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Patient p = (Patient)obj;
+		if(name == p.getName() &&
+				email == p.getEmail() &&
+				address == p.getAddress() &&
+				dob.equals(p.getDob()) &&
+				treatment == p.getDiagnosis() &&
+				phone == p.getPhone() &&
+				diagnosis == p.getDiagnosis()) {
+			return true;
+		}
+		return false;
+	}
+	
+	//checks if personal data of this patient and p is changed
+	public boolean personalDataChanged(Patient p) {
+		if(name.equals(p.getName()) &&
+				email.equals(p.getEmail()) &&
+				address.equals(p.getAddress()) &&
+				dob.equals(p.getDob()) &&
+				phone == p.getPhone())
+			return false;
+		return true;
+	}
+	
+	public boolean treatmentCompleted(Patient p) {
+		if(!getTreatment().equals("COMPLETED") && p.getTreatment().equals("COMPLETED")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean diagnosisCompleted(Patient p) {
+		if(getTreatment().equals("ONGOING") && (!p.getTreatment().equals("ONGOING") || !p.getTreatment().equals("COMPLETED")))
+			return true;
+		return false;
+	}
+	
+	@JsonIgnore
+	public String getPersonalInfoToString() {
+		return "\nID: " + getUuid() + 
+				"\nName: " + getName() +
+				"\nAddress: " + getAddress() +
+				"\nPhone: " + getPhone() +
+				"\nDob: " + getDob() +
+				"\nEmail: " + getEmail();
+	}
+	
+	@JsonIgnore
+	public String getMedicalInfoToString() {
+		return "\nID: " + getUuid() + 
+				"\nName: " + getName() +
+				"\nDiagnosis: " + getDiagnosis() +
+				"\nTreatment" + getTreatment();
+	}
 }
+

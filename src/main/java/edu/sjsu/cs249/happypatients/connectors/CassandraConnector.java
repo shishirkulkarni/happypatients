@@ -1,6 +1,8 @@
 package edu.sjsu.cs249.happypatients.connectors;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import com.datastax.driver.core.Cluster;
@@ -10,6 +12,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
+
 import edu.sjsu.cs249.happypatients.models.Patient;
 
 public class CassandraConnector {
@@ -63,7 +67,31 @@ public class CassandraConnector {
 		return p;
 	}
 	
+	public List<Patient> findAll() {
+		List<Patient> patients = new ArrayList<>();
+		PreparedStatement statement = getSession().prepare("SELECT * FROM patients");
+		
+		ResultSet results = getSession().execute(statement.bind());
+		for(Row r: results) {
+			Patient p = new Patient();
+			p.setUuid(r.getUUID("id"));
+			p.setName(r.getString("name"));
+			p.setEmail(r.getString("email"));
+			p.setDob(new Date(r.getDate("dob").getMillisSinceEpoch()));
+			p.setPhone(r.getLong("phone"));
+			p.setAddress(r.getString("address"));
+			p.setDiagnosisDate(new Date(r.getDate("diagnosis_date").getMillisSinceEpoch()));
+			p.setDiagnosis(r.getString("diagnosis"));
+			p.setTreatment(r.getString("treatment"));
+			patients.add(p);
+		}
+		
+		return patients;
+	}
+	
 	public Patient update(Patient p) {
+		
+		Patient oldData = findOne(p.getUuid());
 		
 		PreparedStatement statement = getSession().prepare(
 				"UPDATE patients SET "
@@ -71,9 +99,9 @@ public class CassandraConnector {
 				+ "dob = ?, "
 				+ "address = ?, "
 				+ "phone = ?, "
-				+ "email = ? "
-				+ "diagnosis = ? "
-				+ "diagnosis_date = ? "
+				+ "email = ?, "
+				+ "diagnosis = ?, "
+				+ "diagnosis_date = ?, "
 				+ "treatment = ? "
 				+ "WHERE id = ?");
 		
@@ -97,6 +125,8 @@ public class CassandraConnector {
 		PreparedStatement statement =  getSession().prepare(
 				"INSERT INTO patients (id, name, dob, address, phone, email, diagnosis_date, diagnosis, treatment)"
 				+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		
+		p.setUuid(UUID.randomUUID());
 		
 		getSession().execute(statement.bind()
 				.setString("name", p.getName())
