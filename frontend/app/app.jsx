@@ -6,6 +6,8 @@ import Patients from "./Patients.jsx";
 import NewPatient from "./newPatient.jsx";
 import EditPatient from "./EditPatient.jsx";
 import Navbar from "./Navbar.jsx";
+import Notification from "./Notification.jsx";
+import '../styles/App.css';
 
 
 export default class App extends Component {
@@ -15,7 +17,8 @@ export default class App extends Component {
 			loading: true,
 			patients: [],
 			currentFragment: "home",
-			currentPatient: {}
+			currentPatient: {},
+			notification: ""
 		};
 	}
 
@@ -77,16 +80,28 @@ export default class App extends Component {
 		}
 	}
 
+	displayNotification(message) {
+		this.setState({
+			notification: message
+		});
+	}
+
 	render() {
+		let commonApi = {
+			displayNotification: this.displayNotification.bind(this),
+			changeFragment: this.changeFragment.bind(this)
+		}
+
 		return (
-			<div className="happypatients">
-				<Navbar />
+			<div className={"happypatients " + (this.state.loading ? "loading" : "")}>
+				{this.state.notification && <Notification message={this.state.notification}/>}
+				<Navbar commonApi={commonApi} />
 				<div className="container">
 					{
 						this.state.loading ? <div className="loading-overlay"></div> : 
-						(this.state.currentFragment === "home" && <Patients patients = {this.state.patients} changeFragment={this.changeFragment.bind(this)} />) ||
-						(this.state.currentFragment === "add-patient" && <NewPatient changeFragment = {this.changeFragment.bind(this)}/>) ||
-						(this.state.currentFragment === "edit-patient" && <EditPatient patient={this.state.currrentPatient} changeFragment={this.changeFragment.bind(this)} />)
+						(this.state.currentFragment === "home" && <Patients commonApi={commonApi} patients={this.state.patients} changeFragment={this.changeFragment.bind(this)} />) ||
+						(this.state.currentFragment === "add-patient" && <NewPatient commonApi={commonApi} changeFragment = {this.changeFragment.bind(this)}/>) ||
+						(this.state.currentFragment === "edit-patient" && <EditPatient commonApi={commonApi} patient={this.state.currrentPatient} changeFragment={this.changeFragment.bind(this)} />)
 					}
 				</div>
 			</div>

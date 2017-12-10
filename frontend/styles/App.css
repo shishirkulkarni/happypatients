@@ -1,0 +1,10 @@
+.happypatients .loading-overlay {
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	background: url('/images/loading.gif') no-repeat;
+	background-position: center;
+}
+

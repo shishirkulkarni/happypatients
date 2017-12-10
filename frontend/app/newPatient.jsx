@@ -16,14 +16,18 @@ export default class NewPatient extends Component {
 		}
 	}
 
-	submitForm() {
+	submitForm(e) {
+		e.preventDefault();
 		fetch("http://localhost:8080/happypatients/webapi/patients", {
 			method: "POST",
 			body: JSON.stringify(this.state),
 			headers: {
 				"Content-Type": "application/json"
 			}
-		}).then((response) => {});
+		}).then((response) => {
+			this.props.changeFragment("home");
+			this.props.commonApi.displayNotification( "Success!!! Patient added");
+		});
 	}
 
 	render() {

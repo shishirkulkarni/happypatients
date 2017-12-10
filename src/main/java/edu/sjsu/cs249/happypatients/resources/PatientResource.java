@@ -72,6 +72,7 @@ public class PatientResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Patient putPatient(@PathParam("id") UUID id, Patient p) {
+
 		try {
 			p.setUuid(id);
 			try {

@@ -9,7 +9,7 @@ redis:
 policyserver:
   hostname: localhost
   port: 8080
-  path: /policyserver/webapi/myresource
+  path: /policyserver/webapi/getpolicy
   protocol: http
 activemq:
   hostname: 172.20.0.3

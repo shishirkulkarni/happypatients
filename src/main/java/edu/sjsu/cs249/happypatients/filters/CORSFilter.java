@@ -15,7 +15,7 @@ public class CORSFilter implements ContainerResponseFilter{
 		res.getHeaders().add("Access-Control-Allow-Origin", "http://localhost:3000");
 		res.getHeaders().add("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
 		res.getHeaders().add("Access-Control-Allow-Credentials", "true");
-		res.getHeaders().add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+		res.getHeaders().add("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE, OPTIONS");
 	}
 
 }

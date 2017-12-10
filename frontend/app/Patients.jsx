@@ -25,6 +25,7 @@ export default class Patients extends Component {
 			method: "DELETE"
 		}).then((data) => {
 			this.props.changeFragment("home");
+			this.props.commonApi.displayNotification("Patient deleted successfully");
 		});
 	}
 

@@ -3,9 +3,7 @@ import React, {Component} from 'react';
 export default class EditPatient extends Component {
 	constructor() {
 		super();
-		this.state = {
-			patient: {}
-		};
+		this.state = {};
 	}
 
 	componentWillMount() {	
@@ -26,13 +24,18 @@ export default class EditPatient extends Component {
 		});
 	}
 
-	submitForm() {
+	submitForm(e) {
+		e.preventDefault();
+
 		fetch("http://localhost:8080/happypatients/webapi/patients/" + this.state.uuid, {
 			method: "PUT",
 			body: JSON.stringify(this.state),
 			headers: {
 				"Content-Type": "application/json"
 			}
+		}).then(() => {
+			this.props.changeFragment("home");
+			this.props.commonApi.displayNotification("Success!!! Patient updated");
 		});
 	}
 

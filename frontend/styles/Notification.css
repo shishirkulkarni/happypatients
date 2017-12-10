@@ -1,0 +1,6 @@
+.notification.alert {
+	min-width: 30vw;
+	transition: top 0.3s ease;
+	z-index: 1000;
+	text-align: center;
+}
