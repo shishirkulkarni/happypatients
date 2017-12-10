@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.UUID;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
@@ -15,13 +17,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.sjsu.cs249.happypatients.adapters.*;
 
-
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement
 public class Patient {
 	@XmlJavaTypeAdapter(UUIDAdapter.class)
 	private UUID uuid;
 	private long phone;
 	private String name, email, address, treatment, diagnosis;
+	
 	
 	@XmlJavaTypeAdapter(DateAdapter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
