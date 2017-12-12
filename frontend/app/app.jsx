@@ -8,6 +8,7 @@ import EditPatient from "./EditPatient.jsx";
 import Navbar from "./Navbar.jsx";
 import Notification from "./Notification.jsx";
 import '../styles/App.css';
+import Websocket from "./Websocket.jsx";
 
 
 export default class App extends Component {
@@ -107,6 +108,7 @@ export default class App extends Component {
 
 		return (
 			<div className={"happypatients " + (this.state.loading ? "loading" : "")}>
+				<Websocket />
 				<Notification message={this.state.notification} commonApi={commonApi} />
 				<Navbar commonApi={commonApi} />
 				<div className="container">

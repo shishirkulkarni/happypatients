@@ -1,0 +1,20 @@
+.navbar select {
+	color: #FFF;
+	background: #222;
+	border: none;
+	box-shadow: none;
+	height: 100%;
+	padding: 15px;
+	display: inline;
+	width: auto;
+}
+
+.navbar select:focus {
+	box-shadow: none;
+}
+
+.navbar .fetchpolicy-label {
+	display: inline;
+	color: #FFF;
+	margin-left: 20px;
+}

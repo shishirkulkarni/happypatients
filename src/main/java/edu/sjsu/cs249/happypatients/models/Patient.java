@@ -160,7 +160,7 @@ public class Patient {
 	
 	@JsonIgnore
 	public String getPersonalInfoToString() {
-		return "\nID: " + getUuid() + 
+		return "ID: " + getUuid() + 
 				"\nName: " + getName() +
 				"\nAddress: " + getAddress() +
 				"\nPhone: " + getPhone() +
@@ -170,10 +170,10 @@ public class Patient {
 	
 	@JsonIgnore
 	public String getMedicalInfoToString() {
-		return "\nID: " + getUuid() + 
+		return "ID: " + getUuid() + 
 				"\nName: " + getName() +
 				"\nDiagnosis: " + getDiagnosis() +
-				"\nTreatment" + getTreatment();
+				"\nTreatment: " + getTreatment();
 	}
 }
 

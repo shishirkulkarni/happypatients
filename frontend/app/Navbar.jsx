@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import "../styles/Navbar.css";
 
 export default class Navbar extends Component {
 	constructor() {
@@ -53,6 +54,7 @@ export default class Navbar extends Component {
 						<ul className="nav navbar-nav">
 							<li className="active"><a data-toggle="tab" href="#create">Home</a></li>
 							<li>
+								<label className="fetchpolicy-label">Fetch Policy: </label>
 								{(<select className="form-control" onChange={this.changePolicy.bind(this)} value={this.state.policy}>
 									<option value="ONGOING"> Ongoing </option>
 									<option value="ICU"> ICU </option>

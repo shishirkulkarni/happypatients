@@ -40,9 +40,7 @@ public class PatientService {
 			producer = new Producer(mqConnector, config.getActiveMQTopic());
 			producer.initialize();
 			emailConsumer = new Consumer(mqConnector, config.getActiveMQTopic());
-//			analyticsConsumer = new Consumer(mqConnector, config.getActiveMQTopic());
 			emailConsumer.initialize();
-//			analyticsConsumer.initialize();
 			emailConsumer.startListening();
 			
 		} catch (IOException e) {

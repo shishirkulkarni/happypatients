@@ -12,7 +12,7 @@ policyserver:
   path: /policyserver/webapi/policy/get
   protocol: http
 activemq:
-  hostname: 172.20.0.2
+  hostname: 172.20.0.3
   port: 61616
   protocol: tcp
   topic: happypatients

@@ -1,5 +1,7 @@
 package edu.sjsu.cs249.happypatients.messengers;
 
+import java.util.Observable;
+
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -10,7 +12,7 @@ import javax.jms.TextMessage;
 
 import edu.sjsu.cs249.happypatients.connectors.ActiveMQConnector;
 
-public class Consumer implements MessageListener {
+public class Consumer extends Observable implements MessageListener {
 	private Session session;
 	private ActiveMQConnector conn;
 	private MessageConsumer consumer;
@@ -35,7 +37,8 @@ public class Consumer implements MessageListener {
 	@Override
 	public void onMessage(Message message) {
 		try {
-			System.out.println(((TextMessage) message).getText());
+			this.setChanged();
+			this.notifyObservers(((TextMessage) message).getText());
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
