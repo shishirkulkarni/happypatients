@@ -9,10 +9,10 @@ redis:
 policyserver:
   hostname: localhost
   port: 8080
-  path: /policyserver/webapi/getpolicy
+  path: /policyserver/webapi/policy/get
   protocol: http
 activemq:
-  hostname: 172.20.0.3
+  hostname: 172.20.0.2
   port: 61616
   protocol: tcp
   topic: happypatients

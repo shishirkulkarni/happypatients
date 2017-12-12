@@ -37,7 +37,6 @@ public class PatientService {
 			cassandraConnector = new CassandraConnector(config.getCassandraHost(), config.getCassandraPort(), config.getCassandraKeyspace());
 			policyServer = new PolicyServer(config.getPolicyServerHost(), config.getPolicyServerPort(), config.getPolicyServerProtocol(), config.getPolicyServerPath());
 			mqConnector = new ActiveMQConnector(config.getActiveMQProtocol(), config.getActiveMQHost(), config.getActiveMQPort());
-			System.out.println(config.getActiveMQTopic());
 			producer = new Producer(mqConnector, config.getActiveMQTopic());
 			producer.initialize();
 			emailConsumer = new Consumer(mqConnector, config.getActiveMQTopic());
@@ -71,23 +70,18 @@ public class PatientService {
 	
 	public Patient putPatient(Patient p) throws IOException, JMSException {
 		Patient old = cassandraConnector.findOne(p.getUuid());
-		System.out.println(p.getUuid());
 		
 		cassandraConnector.update(p);
 		testAndCache(p);
 		
 		if(old.personalDataChanged(p)) {
-			//TODO: send personal changed info message
 			producer.sendMessage("Personal Info Changed \n " + p.getPersonalInfoToString());
 		}
 		
 		if(old.treatmentCompleted(p)) {
-			//TODO: send treatment completed message
 			producer.sendMessage("Treatment Completed \n " + p.getMedicalInfoToString());
 		} else if(old.diagnosisCompleted(p)) {
-			//TODO: send Diagnosis completed message
 			producer.sendMessage("Diagnosis Completed \n" + p.getMedicalInfoToString());
-			
 		}
 		
 		return p;
@@ -102,7 +96,6 @@ public class PatientService {
 	public void deletePatient(Patient p) throws JMSException {
 		cassandraConnector.delete(p);
 		redisConnector.del(p.getUuid().toString());
-		//TODO: Send email about being deleted
 		producer.sendMessage("User Info Deleted\n " +
 					"Id: " + p.getUuid());
 	}
@@ -116,34 +109,28 @@ public class PatientService {
 		Calendar c = Calendar.getInstance();
 		c.setTime(p.getDiagnosisDate());
 		
-//		System.out.println(" Year less than 2000: " + (c.get(Calendar.YEAR) < 2000));
-		
 		if(c.get(Calendar.YEAR) < 2000) {
-			System.out.println("*******returning***********");
 			redisConnector.del(p.getUuid().toString());
 			return;
 		}
 		
 		String policy = policyServer.getPolicy();
-//		System.out.println(" Policy: " + policy);
 		
 		if(policy == null || policy.equals("")) {
-//			System.out.println("*******returning***********");
+
 			return;
 		}
-		
-//		System.out.println("Treatement: " + policy.equals(p.getTreatment()));
-		
-			switch (p.getTreatment()) {
-				case "URGENTCARE":
-				case "ICU":
-					if(policy.equals(policy))
-						redisConnector.set(p.getUuid().toString(), p.toJSON());
-					break;
-				case "ONGOING":
-				default:
-					redisConnector.del(p.getUuid().toString());
-			}
+				
+		switch (p.getTreatment()) {
+		case "URGENTCARE":
+		case "ICU":
+			if(policy.equals(policy))
+				redisConnector.set(p.getUuid().toString(), p.toJSON());
+			break;
+		case "ONGOING":
+		default:
+			redisConnector.del(p.getUuid().toString());
+		}
 	}
 	
 	public void sendMessage(String message) {

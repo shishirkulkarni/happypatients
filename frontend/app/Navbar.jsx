@@ -4,7 +4,7 @@ export default class Navbar extends Component {
 	constructor() {
 		super();
 		this.state = {
-			policy: "ICU"
+			policy: ""
 		};
 	}
 
@@ -13,7 +13,6 @@ export default class Navbar extends Component {
 		.then((response) => {
 			return response.text();
 		}).then(policy => {
-			// debugger;
 			this.setState({
 				policy: policy
 			});
@@ -21,24 +20,26 @@ export default class Navbar extends Component {
 	}
 
 	changePolicy(e) {
-		// debugger;
+
+		let policy = e.currentTarget.value
 		this.setState({
 			policy: e.currentTarget.value
 		});
+
 		fetch("http://localhost:8080/policyserver/webapi/policy/set", {
 			method: "PUT",
-			body: this.state.policy,
+			body: policy,
 			headers: {
 				"Content-Type": "text/plain"
 			}
 		}).then(response => {
-			if(response.status == 200) {	
-				this.props.commonApi.displayNotification("Policy Changed Successfully!!!");
-			} else {
-				this.props.commonApi.displayNotification("Error changing policy");
-			}
+			return response.text();
+		}).then(response => {
+			this.setState({
+				policy
+			});
+			this.props.commonApi.displayNotification("Policy changed Successfully");
 		});
-
 	}
 
 	render() {

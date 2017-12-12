@@ -10,11 +10,13 @@ export default class Notification extends Component {
 				top: "-100%",
 				left: "50%",
 				transform: "translateX(-50%)"	
-			}
+			},
+			message: ""
 		}
 	}
 
-	componentWillReceiveProps() {
+	componentWillReceiveProps(props) {
+		
 		let origStyle = {
 			position: "fixed",
 			top: "-100px",

@@ -55,6 +55,12 @@ export default class App extends Component {
 	}
 
 	changeFragment(fragment, uuid) {
+
+		//Hack for clearing notification
+		this.setState({
+			notification: ""
+		});
+		
 		switch(fragment) {
 			case "home":
 				this.setLoading();
@@ -86,15 +92,22 @@ export default class App extends Component {
 		});
 	}
 
+	clearNotification() {
+		this.setState({
+			notification: ""
+		});
+	}
+
 	render() {
 		let commonApi = {
 			displayNotification: this.displayNotification.bind(this),
-			changeFragment: this.changeFragment.bind(this)
+			changeFragment: this.changeFragment.bind(this),
+			clearNotification: this.clearNotification.bind(this)
 		}
 
 		return (
 			<div className={"happypatients " + (this.state.loading ? "loading" : "")}>
-				{this.state.notification && <Notification message={this.state.notification}/>}
+				<Notification message={this.state.notification} commonApi={commonApi} />
 				<Navbar commonApi={commonApi} />
 				<div className="container">
 					{
